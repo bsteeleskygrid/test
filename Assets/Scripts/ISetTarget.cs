@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public interface ISetTarget
+﻿public interface ISetTarget<T>
 {
-    void SetTarget(Transform newTarget);
+    void SetTarget(T newTarget);
 }

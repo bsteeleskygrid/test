@@ -12,11 +12,6 @@ public class DebugProxyRect : MonoBehaviour
 
     [SerializeField] RectTransform rectTransform;
 
-    public void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-    }
-
     public void OnDrawGizmos()
     {
         if (recycleState == RecycleState.dormant)

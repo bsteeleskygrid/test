@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FollowPosition : TargetPosition
+public class FollowPosition : Targetable<Transform>
 {
     [SerializeField] float maxSpeed = .5f;  // Over 60 frames or 1 second, will move 30 units
 
@@ -14,11 +14,21 @@ public class FollowPosition : TargetPosition
         Vector3 deltaPosition = target.position - this.transform.position;
         Vector3 deltaNormalized = deltaPosition.normalized;
         float deltaMagnitude = deltaPosition.magnitude;
-        float speedScaler = Mathf.Sqrt(deltaMagnitude) / (Mathf.Sqrt(deltaMagnitude) + 1f);
-        float thisFrameSpeed = maxSpeed * speedScaler;
-        thisFrameSpeed = thisFrameSpeed * Time.deltaTime; // ?
+        float thisFrameSpeed = CalcThisFrameAnimation(deltaMagnitude);
         Vector3 thisFrameDelta = deltaNormalized * Mathf.Min(thisFrameSpeed, deltaMagnitude);
-
         this.transform.position = this.transform.position + thisFrameDelta;
     }
+
+    private float CalcThisFrameAnimation(float delta)
+    {
+        float speedScaler = Mathf.Pow(delta, 1f/1.3f) * .2f;
+        float thisFrameSpeed = maxSpeed * speedScaler;
+        return thisFrameSpeed * Time.deltaTime;
+    }
+
+    protected override void OnTargetChanged()
+    {
+        this.transform.position = target.position;
+    }
 }
+
